@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Attendance</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #b5c9b1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            width: 600px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        input, select {
+            padding: 8px;
+            margin: 5px;
+            border-radius: 8px;
+            border: 1px solid #aaa;
+        }
+
+        button {
+            padding: 8px 15px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .add-btn {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .load-btn {
+            background: #007BFF;
+            color: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th {
+            background: #045744;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        td {
+            background: #f9f9f9;
+            padding: 10px;
+        }
+
+        tr:hover td {
+            background: #e8f3ff;
+        }
+
+        .update-btn {
+            background: orange;
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+
+        .delete-btn {
+            background: red;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Student Attendance Dashboard</h2>
+
+    <input type="text" id="nameInput" placeholder="Enter Student Name">
+    <select id="statusInput">
+        <option value="Present">Present</option>
+        <option value="Absent">Absent</option>
+    </select>
+    <button class="add-btn" onclick="addStudent()">Add</button>
+    <button class="load-btn" onclick="loadRecords()">Load Records</button>
+
+    <table id="attendanceTable">
+        <tr>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </table>
+</div>
+
+<script>
+    const table = document.getElementById("attendanceTable");
+
+    function addStudent(name, status) {
+        name = name || document.getElementById("nameInput").value;
+        status = status || document.getElementById("statusInput").value;
+
+        if (name.trim() === "") {
+            alert("Enter a name!");
+            return;
+        }
+
+        const row = document.createElement("tr");
+
+        const nameTd = document.createElement("td");
+        nameTd.textContent = name;
+
+        const statusTd = document.createElement("td");
+        statusTd.textContent = status;
+
+        const actionTd = document.createElement("td");
+
+        const updateBtn = document.createElement("button");
+        updateBtn.textContent = "Update";
+        updateBtn.className = "update-btn";
+        updateBtn.onclick = function () {
+            statusTd.textContent =
+                statusTd.textContent === "Present" ? "Absent" : "Present";
+        };
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.className = "delete-btn";
+        deleteBtn.onclick = function () {
+            row.remove();
+        };
+
+        actionTd.appendChild(updateBtn);
+        actionTd.appendChild(deleteBtn);
+
+        row.appendChild(nameTd);
+        row.appendChild(statusTd);
+        row.appendChild(actionTd);
+
+        table.appendChild(row);
+
+        document.getElementById("nameInput").value = "";
+    }
+
+    async function loadRecords() {
+        alert("Loading records...");
+
+        const dataPromise = new Promise((resolve) => {
+            setTimeout(() => {
+                resolve([
+                    { name: "Aman", status: "Present" },
+                    { name: "Simran", status: "Absent" }
+                ]);
+            }, 2000);
+        });
+
+        const records = await dataPromise;
+
+        records.forEach((rec) => addStudent(rec.name, rec.status));
+    }
+</script>
+
+</body>
+</html>
